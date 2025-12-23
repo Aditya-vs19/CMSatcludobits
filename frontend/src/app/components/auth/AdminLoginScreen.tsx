@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Shield, ArrowLeft, AlertCircle } from 'lucide-react';
+import { Shield, ArrowLeft } from 'lucide-react';
 
 interface AdminLoginScreenProps {
   onLogin: (email: string, password: string) => void;
@@ -9,36 +9,18 @@ interface AdminLoginScreenProps {
 export function AdminLoginScreen({ onLogin, onBack }: AdminLoginScreenProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [emailError, setEmailError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-    setEmailError(false);
-    setPasswordError(false);
-
-    // Basic validation
-    if (!email) {
-      setEmailError(true);
-      setError('Please enter your email address');
-      return;
-    }
-
-    if (!password) {
-      setPasswordError(true);
-      setError('Please enter your password');
-      return;
-    }
-
-    // Demo validation - accept any email with password "admin123"
-    if (password === 'admin123') {
+    
+    // Accept any input and proceed
+    setIsLoading(true);
+    
+    // Simulate loading state
+    setTimeout(() => {
       onLogin(email, password);
-    } else {
-      setError('Invalid email or password');
-      setPasswordError(true);
-    }
+    }, 800);
   };
 
   return (
@@ -64,17 +46,6 @@ export function AdminLoginScreen({ onLogin, onBack }: AdminLoginScreenProps) {
             <p className="text-gray-600">Enter your credentials to continue</p>
           </div>
 
-          {/* Error Message */}
-          {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" strokeWidth={1.5} />
-              <div>
-                <div className="text-red-900 mb-1">Authentication Error</div>
-                <div className="text-red-700">{error}</div>
-              </div>
-            </div>
-          )}
-
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
@@ -85,17 +56,10 @@ export function AdminLoginScreen({ onLogin, onBack }: AdminLoginScreenProps) {
                 type="email"
                 id="email"
                 value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  setEmailError(false);
-                  setError('');
-                }}
-                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
-                  emailError
-                    ? 'border-red-300 focus:ring-red-200 focus:border-red-400'
-                    : 'border-gray-200 focus:ring-[#007AFF]/20 focus:border-[#007AFF]'
-                }`}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF] transition-colors"
                 placeholder="admin@cludobits.com"
+                required
               />
             </div>
 
@@ -107,42 +71,27 @@ export function AdminLoginScreen({ onLogin, onBack }: AdminLoginScreenProps) {
                 type="password"
                 id="password"
                 value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setPasswordError(false);
-                  setError('');
-                }}
-                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
-                  passwordError
-                    ? 'border-red-300 focus:ring-red-200 focus:border-red-400'
-                    : 'border-gray-200 focus:ring-[#007AFF]/20 focus:border-[#007AFF]'
-                }`}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF] transition-colors"
                 placeholder="Enter your password"
+                required
               />
             </div>
 
             <button
               type="submit"
-              className="w-full px-4 py-3 bg-[#007AFF] text-white rounded-lg hover:bg-[#0051D5] transition-colors"
+              disabled={isLoading}
+              className="w-full px-4 py-3 bg-[#007AFF] text-white rounded-lg hover:bg-[#0051D5] active:bg-[#004EC2] transition-colors disabled:bg-[#007AFF]/60 disabled:cursor-not-allowed"
             >
-              Sign In
+              {isLoading ? 'Signing in...' : 'Sign In'}
             </button>
           </form>
 
           {/* Forgot Password Link */}
           <div className="mt-6 text-center">
-            <button className="text-[#007AFF] hover:underline">
+            <button className="text-[#007AFF] hover:underline transition-all">
               Forgot password?
             </button>
-          </div>
-        </div>
-
-        {/* Demo Credentials */}
-        <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <div className="text-blue-900 mb-1">Demo Credentials</div>
-          <div className="text-blue-700 text-sm">
-            Email: Any valid email<br />
-            Password: admin123
           </div>
         </div>
       </div>

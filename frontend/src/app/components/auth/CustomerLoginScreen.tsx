@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CircleUser, ArrowLeft, AlertCircle, Info } from 'lucide-react';
+import { CircleUser, ArrowLeft } from 'lucide-react';
 
 interface CustomerLoginScreenProps {
   onLogin: (identifier: string) => void;
@@ -8,23 +8,18 @@ interface CustomerLoginScreenProps {
 
 export function CustomerLoginScreen({ onLogin, onBack }: CustomerLoginScreenProps) {
   const [identifier, setIdentifier] = useState('');
-  const [error, setError] = useState('');
-  const [identifierError, setIdentifierError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-    setIdentifierError(false);
-
-    // Basic validation
-    if (!identifier) {
-      setIdentifierError(true);
-      setError('Please enter your email or tracking ID');
-      return;
-    }
-
-    // Accept any non-empty identifier for demo
-    onLogin(identifier);
+    
+    // Accept any input and proceed
+    setIsLoading(true);
+    
+    // Simulate loading state
+    setTimeout(() => {
+      onLogin(identifier);
+    }, 800);
   };
 
   return (
@@ -50,67 +45,34 @@ export function CustomerLoginScreen({ onLogin, onBack }: CustomerLoginScreenProp
             <p className="text-gray-600">Track your tickets and submit feedback</p>
           </div>
 
-          {/* Info Notice */}
-          <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg flex items-start gap-3">
-            <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" strokeWidth={1.5} />
-            <div className="text-blue-700">
-              Customers can track tickets and submit feedback without full account login
-            </div>
-          </div>
-
-          {/* Error Message */}
-          {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" strokeWidth={1.5} />
-              <div>
-                <div className="text-red-900 mb-1">Validation Error</div>
-                <div className="text-red-700">{error}</div>
-              </div>
-            </div>
-          )}
-
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label htmlFor="identifier" className="block text-gray-700 mb-2">
-                Email or Tracking ID
+                Email or Ticket Tracking ID
               </label>
               <input
                 type="text"
                 id="identifier"
                 value={identifier}
-                onChange={(e) => {
-                  setIdentifier(e.target.value);
-                  setIdentifierError(false);
-                  setError('');
-                }}
-                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
-                  identifierError
-                    ? 'border-red-300 focus:ring-red-200 focus:border-red-400'
-                    : 'border-gray-200 focus:ring-[#007AFF]/20 focus:border-[#007AFF]'
-                }`}
+                onChange={(e) => setIdentifier(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF] transition-colors"
                 placeholder="customer@email.com or TCK-2401"
+                required
               />
               <p className="mt-2 text-gray-600">
-                Enter your email address or the tracking ID provided in your ticket confirmation
+                Enter your email address or the tracking ID from your ticket confirmation
               </p>
             </div>
 
             <button
               type="submit"
-              className="w-full px-4 py-3 bg-[#007AFF] text-white rounded-lg hover:bg-[#0051D5] transition-colors"
+              disabled={isLoading}
+              className="w-full px-4 py-3 bg-[#007AFF] text-white rounded-lg hover:bg-[#0051D5] active:bg-[#004EC2] transition-colors disabled:bg-[#007AFF]/60 disabled:cursor-not-allowed"
             >
-              Continue
+              {isLoading ? 'Continuing...' : 'Continue'}
             </button>
           </form>
-        </div>
-
-        {/* Demo Info */}
-        <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <div className="text-blue-900 mb-1">Demo Access</div>
-          <div className="text-blue-700 text-sm">
-            Enter any email or tracking ID (e.g., TCK-2401) to continue
-          </div>
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { UserCog, ArrowLeft, AlertCircle } from 'lucide-react';
+import { UserCog, ArrowLeft } from 'lucide-react';
 
 interface EngineerLoginScreenProps {
   onLogin: (engineerId: string, password: string) => void;
@@ -9,36 +9,18 @@ interface EngineerLoginScreenProps {
 export function EngineerLoginScreen({ onLogin, onBack }: EngineerLoginScreenProps) {
   const [engineerId, setEngineerId] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [engineerIdError, setEngineerIdError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-    setEngineerIdError(false);
-    setPasswordError(false);
-
-    // Basic validation
-    if (!engineerId) {
-      setEngineerIdError(true);
-      setError('Please enter your Engineer ID or email');
-      return;
-    }
-
-    if (!password) {
-      setPasswordError(true);
-      setError('Please enter your password');
-      return;
-    }
-
-    // Demo validation - accept any engineer ID with password "engineer123"
-    if (password === 'engineer123') {
+    
+    // Accept any input and proceed
+    setIsLoading(true);
+    
+    // Simulate loading state
+    setTimeout(() => {
       onLogin(engineerId, password);
-    } else {
-      setError('Invalid Engineer ID or password');
-      setPasswordError(true);
-    }
+    }, 800);
   };
 
   return (
@@ -61,19 +43,8 @@ export function EngineerLoginScreen({ onLogin, onBack }: EngineerLoginScreenProp
               <UserCog className="w-8 h-8 text-[#007AFF]" strokeWidth={1.5} />
             </div>
             <h2 className="text-black mb-2">Engineer Login</h2>
-            <p className="text-gray-600">Access your assigned tickets</p>
+            <p className="text-gray-600">Support Engineer Access</p>
           </div>
-
-          {/* Error Message */}
-          {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" strokeWidth={1.5} />
-              <div>
-                <div className="text-red-900 mb-1">Authentication Error</div>
-                <div className="text-red-700">{error}</div>
-              </div>
-            </div>
-          )}
 
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -85,17 +56,10 @@ export function EngineerLoginScreen({ onLogin, onBack }: EngineerLoginScreenProp
                 type="text"
                 id="engineerId"
                 value={engineerId}
-                onChange={(e) => {
-                  setEngineerId(e.target.value);
-                  setEngineerIdError(false);
-                  setError('');
-                }}
-                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
-                  engineerIdError
-                    ? 'border-red-300 focus:ring-red-200 focus:border-red-400'
-                    : 'border-gray-200 focus:ring-[#007AFF]/20 focus:border-[#007AFF]'
-                }`}
+                onChange={(e) => setEngineerId(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF] transition-colors"
                 placeholder="ENG-001 or engineer@cludobits.com"
+                required
               />
             </div>
 
@@ -107,36 +71,21 @@ export function EngineerLoginScreen({ onLogin, onBack }: EngineerLoginScreenProp
                 type="password"
                 id="password"
                 value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setPasswordError(false);
-                  setError('');
-                }}
-                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
-                  passwordError
-                    ? 'border-red-300 focus:ring-red-200 focus:border-red-400'
-                    : 'border-gray-200 focus:ring-[#007AFF]/20 focus:border-[#007AFF]'
-                }`}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF] transition-colors"
                 placeholder="Enter your password"
+                required
               />
             </div>
 
             <button
               type="submit"
-              className="w-full px-4 py-3 bg-[#007AFF] text-white rounded-lg hover:bg-[#0051D5] transition-colors"
+              disabled={isLoading}
+              className="w-full px-4 py-3 bg-[#007AFF] text-white rounded-lg hover:bg-[#0051D5] active:bg-[#004EC2] transition-colors disabled:bg-[#007AFF]/60 disabled:cursor-not-allowed"
             >
-              Sign In
+              {isLoading ? 'Signing in...' : 'Sign In'}
             </button>
           </form>
-        </div>
-
-        {/* Demo Credentials */}
-        <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <div className="text-blue-900 mb-1">Demo Credentials</div>
-          <div className="text-blue-700 text-sm">
-            Engineer ID: Any ID or email<br />
-            Password: engineer123
-          </div>
         </div>
       </div>
     </div>

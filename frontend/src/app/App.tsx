@@ -132,7 +132,7 @@ export default function App() {
 
   // Customer Portal (different layout)
   if (authState.role === 'customer') {
-    return <CustomerPortal trackingId={authState.trackingId || ''} />;
+    return <CustomerPortal trackingId={authState.trackingId || ''} onLogout={handleLogout} />;
   }
 
   // Admin and Engineer views

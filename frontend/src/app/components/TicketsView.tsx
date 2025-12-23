@@ -108,6 +108,29 @@ export function TicketsView() {
   const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(allTickets[0]);
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [priorityFilter, setPriorityFilter] = useState<string>('all');
+  const [showStatusModal, setShowStatusModal] = useState(false);
+  const [showSCRView, setShowSCRView] = useState(false);
+  const [showFullDetails, setShowFullDetails] = useState(false);
+  const [viewMode, setViewMode] = useState<'list' | 'detail'>('list');
+
+  const handleViewTicketDetail = (ticket: Ticket) => {
+    setSelectedTicket(ticket);
+    setViewMode('detail');
+  };
+
+  const handleBackToList = () => {
+    setViewMode('list');
+  };
+
+  const handleUpdateStatus = () => {
+    setShowStatusModal(true);
+    setTimeout(() => setShowStatusModal(false), 2000);
+  };
+
+  const handleGenerateSCR = () => {
+    setShowSCRView(true);
+    setTimeout(() => setShowSCRView(false), 2000);
+  };
 
   const getStatusColor = (status: Ticket['status']) => {
     switch (status) {
@@ -175,11 +198,6 @@ export function TicketsView() {
             <option value="medium">Medium</option>
             <option value="low">Low</option>
           </select>
-
-          {/* Create Ticket Button */}
-          <button className="px-6 py-2 bg-[#007AFF] text-white rounded-lg hover:bg-[#0051D5] transition-colors whitespace-nowrap">
-            Create Ticket
-          </button>
         </div>
       </div>
 
@@ -194,7 +212,7 @@ export function TicketsView() {
             {allTickets.map((ticket) => (
               <div
                 key={ticket.id}
-                onClick={() => setSelectedTicket(ticket)}
+                onClick={() => handleViewTicketDetail(ticket)}
                 className={`px-6 py-4 border-b border-gray-100 cursor-pointer transition-colors ${
                   selectedTicket?.id === ticket.id
                     ? 'bg-[#007AFF]/5 border-l-4 border-l-[#007AFF]'
@@ -227,7 +245,7 @@ export function TicketsView() {
         </div>
 
         {/* Ticket Details Panel */}
-        {selectedTicket && (
+        {viewMode === 'detail' && selectedTicket && (
           <div className="bg-white rounded-xl border border-gray-200 p-6">
             <div className="flex items-start justify-between mb-6">
               <div>
@@ -246,6 +264,12 @@ export function TicketsView() {
                   </span>
                 </div>
               </div>
+              <button
+                className="text-gray-500 hover:text-gray-700"
+                onClick={handleBackToList}
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
             </div>
 
             <div className="space-y-6">
@@ -281,13 +305,22 @@ export function TicketsView() {
 
               {/* Action Buttons */}
               <div className="pt-4 border-t border-gray-200 space-y-3">
-                <button className="w-full px-4 py-2 bg-[#007AFF] text-white rounded-lg hover:bg-[#0051D5] transition-colors">
+                <button
+                  className="w-full px-4 py-2 bg-[#007AFF] text-white rounded-lg hover:bg-[#0051D5] transition-colors"
+                  onClick={handleUpdateStatus}
+                >
                   Update Status
                 </button>
-                <button className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
+                <button
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                  onClick={handleGenerateSCR}
+                >
                   Generate SCR
                 </button>
-                <button className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
+                <button
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                  onClick={() => setShowFullDetails(true)}
+                >
                   View Full Details
                 </button>
               </div>

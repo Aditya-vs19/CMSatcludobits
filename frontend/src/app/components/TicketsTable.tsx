@@ -1,4 +1,5 @@
 import { ChevronRight } from 'lucide-react';
+import { useState } from 'react';
 
 interface Ticket {
   id: string;
@@ -7,6 +8,8 @@ interface Ticket {
   engineer: string;
   status: 'Open' | 'In Progress' | 'Closed';
   lastUpdated: string;
+  description?: string;
+  customer?: string;
 }
 
 const tickets: Ticket[] = [
@@ -17,6 +20,8 @@ const tickets: Ticket[] = [
     engineer: 'Sarah Mitchell',
     status: 'In Progress',
     lastUpdated: '2 hours ago',
+    description: 'Office printer on 3rd floor is not responding.',
+    customer: 'ABC Corporation',
   },
   {
     id: 'TCK-2402',
@@ -25,6 +30,8 @@ const tickets: Ticket[] = [
     engineer: 'David Chen',
     status: 'Open',
     lastUpdated: '5 hours ago',
+    description: 'Unable to install latest CRM software update.',
+    customer: 'Tech Solutions Inc',
   },
   {
     id: 'TCK-2403',
@@ -33,6 +40,8 @@ const tickets: Ticket[] = [
     engineer: 'Emily Rodriguez',
     status: 'In Progress',
     lastUpdated: '1 day ago',
+    description: 'Intermittent network connectivity issues.',
+    customer: 'Global Enterprises',
   },
   {
     id: 'TCK-2404',
@@ -41,6 +50,8 @@ const tickets: Ticket[] = [
     engineer: 'Michael Brown',
     status: 'Closed',
     lastUpdated: '2 days ago',
+    description: 'Setup new email account for employee.',
+    customer: 'Metro Services',
   },
   {
     id: 'TCK-2405',
@@ -49,6 +60,8 @@ const tickets: Ticket[] = [
     engineer: 'Lisa Anderson',
     status: 'Open',
     lastUpdated: '3 hours ago',
+    description: 'New employee needs access to internal systems.',
+    customer: 'Digital Dynamics',
   },
   {
     id: 'TCK-2406',
@@ -57,10 +70,20 @@ const tickets: Ticket[] = [
     engineer: 'James Wilson',
     status: 'Closed',
     lastUpdated: '1 week ago',
+    description: 'Replace faulty monitor in conference room.',
+    customer: 'Innovate Ltd',
   },
 ];
 
 export function TicketsTable() {
+  const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
+  const [showDetails, setShowDetails] = useState(false);
+
+  const handleViewTicket = (ticket: Ticket) => {
+    setSelectedTicket(ticket);
+    setShowDetails(true);
+  };
+
   const getStatusColor = (status: Ticket['status']) => {
     switch (status) {
       case 'Open':
@@ -121,7 +144,10 @@ export function TicketsTable() {
                 </td>
                 <td className="px-6 py-4 text-gray-600">{ticket.lastUpdated}</td>
                 <td className="px-6 py-4">
-                  <button className="text-[#007AFF] hover:text-[#0051D5] flex items-center gap-1 transition-colors">
+                  <button
+                    className="text-[#007AFF] hover:text-[#0051D5] flex items-center gap-1 transition-colors"
+                    onClick={() => handleViewTicket(ticket)}
+                  >
                     View
                     <ChevronRight className="w-4 h-4" strokeWidth={2} />
                   </button>

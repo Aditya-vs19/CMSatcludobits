@@ -56,11 +56,6 @@ export function RoleSelectionScreen({ onSelectRole }: RoleSelectionScreenProps) 
             );
           })}
         </div>
-
-        {/* Footer */}
-        <div className="text-center mt-12 text-gray-600">
-          <p>Need help? Contact support at support@cludobits.com</p>
-        </div>
       </div>
     </div>
   );

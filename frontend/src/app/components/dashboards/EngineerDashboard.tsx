@@ -47,6 +47,9 @@ const assignedTickets: Ticket[] = [
 
 export function EngineerDashboard() {
   const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(assignedTickets[0]);
+  const [showWorkNotes, setShowWorkNotes] = useState(false);
+  const [showSCRGeneration, setShowSCRGeneration] = useState(false);
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
 
   const getStatusColor = (status: Ticket['status']) => {
     switch (status) {
