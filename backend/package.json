@@ -1,0 +1,26 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Cludobits Project",
+  "homepage": "https://github.com/Aditya-vs19/CMSatcludobits#readme",
+  "bugs": {
+    "url": "https://github.com/Aditya-vs19/CMSatcludobits/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aditya-vs19/CMSatcludobits.git"
+  },
+  "license": "ISC",
+  "author": "shreyash",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "nodemon": "^3.1.11"
+  }
+}
